@@ -2,6 +2,7 @@
 #include <soci/sqlite3/soci-sqlite3.h>
 #include <nlohmann/json.hpp>
 #include <fmt/core.h>
+#include <zlib.h>
 #include "foo.h"
 
 using json = nlohmann::json;
