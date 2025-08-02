@@ -5,7 +5,7 @@
 #
 #add_executable(cmakepractice main.cpp)
 include(FetchContent)
-include(CMakePrintHelpers)
+#include(CMakePrintHelpers)
 
 #if(BUILD_DEPS)
 #    file(REMOVE_RECURSE ${PROJECT_SOURCE_DIR}/deps/bin)
@@ -20,11 +20,13 @@ include(CMakePrintHelpers)
 #cmake_print_variables(CMAKE_SYSTEM_NAME CMAKE_SYSTEM_PROCESSOR)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-    set(EXTERNALS_CMAKE_DIR ${PROJECT_BINARY_DIR}/external/lib/cmake)
+    list(APPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/lib/cmake")
+#    set(EXTERNALS_CMAKE_DIR ${PROJECT_BINARY_DIR}/external/lib/cmake)
 else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    set(EXTERNALS_CMAKE_DIR ${PROJECT_BINARY_DIR}/external/lib64/cmake)
+    list(APPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/lib64/cmake")
+#    set(EXTERNALS_CMAKE_DIR ${PROJECT_BINARY_DIR}/external/lib64/cmake)
 endif()
 #cmake_print_variables(EXTERNALS_CMAKE_DIR CMAKE_GENERATOR_PLATFORM)
 
-include("json.cmake")
+#include("json.cmake")
 include("soci.cmake")

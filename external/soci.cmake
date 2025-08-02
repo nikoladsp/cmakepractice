@@ -1,49 +1,46 @@
-set(DEP_NAME "SOCI")
-set(DEP_VERSION "4.0.3")
-
-find_package(${DEP_NAME} ${DEP_VERSION} EXACT PATHS ${EXTERNALS_CMAKE_DIR} NO_DEFAULT_PATH)
-
-if(${DEP_NAME}_FOUND)
-    message("${DEP_NAME} ${DEP_VERSION} found")
-    return()
-endif()
+set(SOCI_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
+set(SOCI_SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/soci-src)
+set(SOCI_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/soci)
 
 FetchContent_Declare(
-        ${DEP_NAME}
-        OVERRIDE_FIND_PACKAGE
-        URL "https://github.com/SOCI/soci/archive/refs/tags/v${DEP_VERSION}.tar.gz"
-        URL_HASH SHA256=4b1ff9c8545c5d802fbe06ee6cd2886630e5c03bf740e269bb625b45cf934928
-)
-FetchContent_GetProperties(${DEP_NAME})
-FetchContent_Populate(${DEP_NAME})
-
-if(NOT ${${DEP_NAME}_POPULATED})
-    message(FATAL_ERROR "${DEP_NAME}-${DEP_VERSION} not populated")
-endif()
-
-set(BUILD_CMD "cmake;-DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/external;-DWITH_BOOST=OFF;-DSOCI_TESTS=OFF;${soci_SOURCE_DIR}")
-execute_process(
-    COMMAND ${BUILD_CMD}
-    WORKING_DIRECTORY "${${DEP_NAME}_BINARY_DIR}"
-    RESULT_VARIABLE DEP_RESULT
+    soci
+    OVERRIDE_FIND_PACKAGE
+    URL "https://github.com/SOCI/soci/archive/refs/tags/v4.0.3.tar.gz"
+    URL_HASH SHA256=4b1ff9c8545c5d802fbe06ee6cd2886630e5c03bf740e269bb625b45cf934928
 )
 
-if(NOT DEP_RESULT EQUAL "0")
-    message(FATAL_ERROR "${DEP_NAME} configure failed with ${DEP_RESULT}")
-else()
-    message("-- ${DEP_NAME} ${DEP_VERSION} configure finished")
+FetchContent_GetProperties(soci)
+if(NOT soci_POPULATED)
+    FetchContent_Populate(soci)
 endif()
 
-execute_process(
-    COMMAND make install
-    WORKING_DIRECTORY "${${DEP_NAME}_BINARY_DIR}"
-    RESULT_VARIABLE DEP_RESULT
-)
+if(NOT EXISTS "${SOCI_INSTALL_DIR}/lib/libsoci_core.a")
+    file(MAKE_DIRECTORY ${SOCI_BINARY_DIR})
 
-if(NOT DEP_RESULT EQUAL "0")
-    message(FATAL_ERROR "${DEP_NAME} build failed with ${DEP_RESULT}")
-else()
-    message("-- ${DEP_NAME} ${DEP_VERSION} build finished")
+    execute_process(
+        COMMAND ${CMAKE_COMMAND}
+        -S ${SOCI_SOURCE_DIR}
+        -B ${SOCI_BINARY_DIR}
+        -DCMAKE_INSTALL_PREFIX=${SOCI_INSTALL_DIR}
+        -DSOCI_STATIC=ON
+        -DSOCI_SHARED=OFF
+        -DSOCI_TESTS=OFF
+        -DWITH_SQLITE3=ON
+        -DWITH_MYSQL=OFF
+        -DWITH_POSTGRESQL=OFF
+        -DWITH_ORACLE=OFF
+        -DWITH_BOOST=OFF
+        RESULT_VARIABLE result_configure
+    )
+    if(NOT result_configure EQUAL 0)
+        message(FATAL_ERROR "Failed to configure SOCI")
+    endif()
+
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} --build ${SOCI_BINARY_DIR} --target install
+        RESULT_VARIABLE result_build
+    )
+    if(NOT result_build EQUAL 0)
+        message(FATAL_ERROR "Failed to build/install SOCI")
+    endif()
 endif()
-
-find_package(${DEP_NAME} ${DEP_VERSION} EXACT REQUIRED PATHS ${EXTERNALS_CMAKE_DIR} NO_DEFAULT_PATH)
