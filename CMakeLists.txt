@@ -4,20 +4,7 @@ project(cmakepractice)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-list(APPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/lib/cmake")
-#list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/external")
-#set(ENV{PKG_CONFIG_PATH} "${PROJECT_BINARY_DIR}/external/lib/pkgconfig")
-#set(ZLIB_ROOT "${CMAKE_BINARY_DIR}/external")
-#set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-
-include(FetchContent)
-#include(ExternalProject)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external")
-include(fmt)
-include(json)
-include(soci)
-include(zlib)
+include(external/dependencies.cmake)
 
 find_package(SOCI 4.0.3 EXACT REQUIRED)
 find_package(FMT 11.2.0 EXACT REQUIRED)

@@ -1,6 +1,6 @@
-set(JSON_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
+set(JSON_INSTALL_DIR ${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX})
 set(JSON_SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/json-src)
-set(JSON_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/json)
+set(JSON_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}/json)
 
 FetchContent_Declare(
     json
