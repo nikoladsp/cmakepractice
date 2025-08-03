@@ -14,13 +14,15 @@ else()
     set(ARCH_SUFFIX "${ARCH_LOWER}")
 endif()
 
-set(INSTALL_DIR ${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX})
+set(EXTERNAL_INSTALL_DIR "${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX}")
+set(EXTERNAL_BUILD_DIR "${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external")
+
+list(PREPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/${ARCH_SUFFIX}/lib/cmake")
+set(ENV{PKG_CONFIG_PATH} "${PROJECT_BINARY_DIR}/external/${ARCH_SUFFIX}/lib/pkgconfig")
 
 include(${CMAKE_CURRENT_LIST_DIR}/fmt.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/json.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/soci.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/zlib.cmake)
-
-list(PREPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/${ARCH_LOWER}/lib/cmake")

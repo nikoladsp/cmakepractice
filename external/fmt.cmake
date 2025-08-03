@@ -1,6 +1,6 @@
-set(FMT_INSTALL_DIR ${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX})
+set(FMT_INSTALL_DIR ${EXTERNAL_INSTALL_DIR})
 set(FMT_SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/fmt-src)
-set(FMT_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}/fmt)
+set(FMT_BINARY_DIR ${EXTERNAL_BUILD_DIR}/fmt)
 
 FetchContent_Declare(
     fmt

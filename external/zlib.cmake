@@ -1,6 +1,6 @@
-set(ZLIB_INSTALL_DIR ${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX})
+set(ZLIB_INSTALL_DIR ${EXTERNAL_INSTALL_DIR})
 set(ZLIB_SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/zlib-src)
-set(ZLIB_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}/zlib)
+set(ZLIB_BINARY_DIR ${EXTERNAL_BUILD_DIR}/zlib)
 
 FetchContent_Declare(
     zlib
@@ -45,10 +45,11 @@ if(NOT EXISTS "${ZLIB_INSTALL_DIR}/lib/libz.a")
     endif()
 endif()
 
-add_library(ZLIB::ZLIB UNKNOWN IMPORTED GLOBAL)
+add_library(ZLIB::ZLIB UNKNOWN IMPORTED)
 add_dependencies(ZLIB::ZLIB zlib)
 set_target_properties(ZLIB::ZLIB PROPERTIES
     IMPORTED_LOCATION ${ZLIB_INSTALL_DIR}/lib/libz.a
     INTERFACE_INCLUDE_DIRECTORIES ${ZLIB_INSTALL_DIR}/include
 )
 
+set(CMAKE_PREFIX_PATH ${ZLIB_INSTALL_DIR} ${CMAKE_PREFIX_PATH})

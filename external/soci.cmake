@@ -1,6 +1,6 @@
-set(SOCI_INSTALL_DIR ${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX})
+set(SOCI_INSTALL_DIR ${EXTERNAL_INSTALL_DIR})
 set(SOCI_SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/soci-src)
-set(SOCI_BINARY_DIR ${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}/soci)
+set(SOCI_BINARY_DIR ${EXTERNAL_BUILD_DIR}/soci)
 
 FetchContent_Declare(
     soci
